@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="static/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/exam.css">
 </head>
 <body>
-<p>Salidao Online Notebin</p>
+<p>Salidao Online Note</p>
 <p>请输入你的文本</p>
     <form action="/register" method="post">
-        <textarea name="text"></textarea>
-        Identity: <input name="uid">
-        <input type="submit">
+        <textarea name="text" class="mutitext"></textarea>
+        <p>身份秘钥（上限20位）: <input name="uid"></p>
+        <input type="submit" value ="提交文本">
     </form>
 </body>
 </html>

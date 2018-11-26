@@ -31,7 +31,7 @@ def index():
 def register():
     text = request.form.get("text")
     name = request.form.get("uid")
-    net = exper('3', name, text)
+    net = exper('3', name, text)  # soon not complete the function' URL'
     db.session.add(net)
     db.session.commit()
     return redirect('/search/'+str(net.id))
@@ -51,7 +51,7 @@ def verify(idx):
     fid = exper.query.get(idx)
     key = request.form.get('identify')
     if fid is None:
-        return "The record is nonexitstent or has been removed", 404
+        return "The record isn't exist or has been removed", 404
     elif operator.eq(fid.code, key) is False:
         return "The identity you had input is valid", 404
     else:
