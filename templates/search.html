@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="/static/exam.css">
 </head>
 <body>
     <p>You can copy the URL to visit your text next time</p>
@@ -10,6 +11,7 @@
     <form action="/search/{{ idp }}/verify" method="post">
         <input name="identify">
         <input type="submit" value="Verify">
+        <input type="submit" value="Delete" formaction="/search/{{ idp }}/delete" formmethod="post">
     </form>
 </body>
 </html>

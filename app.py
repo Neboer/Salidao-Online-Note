@@ -2,6 +2,7 @@ from flask import *
 from flask_sqlalchemy import *
 # from pymysql import *
 import operator
+import sys
 # import pymysql
 
 app = Flask(__name__)
@@ -31,6 +32,10 @@ def index():
 def register():
     text = request.form.get("text")
     name = request.form.get("uid")
+    if sys.getsizeof(text) >= 60000:
+        return "Too Long Text",413
+    elif len(name) >= 20:
+        return "Too Long Identity",413
     net = exper('3', name, text)  # soon not complete the function' URL'
     db.session.add(net)
     db.session.commit()
@@ -55,7 +60,7 @@ def verify(idx):
     elif operator.eq(fid.code, key) is False:
         return "The identity you had input is valid", 404
     else:
-        return render_template('modify.html',idp=idx, text=fid.textee)
+        return render_template('modify.html', idp=idx, text=fid.textee)
 
 
 @app.route('/search/<idx>/modify', methods=["POST"])
@@ -64,6 +69,19 @@ def modify(idx):
     fid.textee = request.form.get("text")
     db.session.commit()
     return redirect('/search/' + str(idx))
+
+
+@app.route('/search/<idd>/delete', methods=["POST"])
+def delete(idd):
+    fid = exper.query.get(idd)
+    if fid is None:
+        return "The record isn't exist or has been removed", 404
+    elif operator.eq(fid.code,request.form.get("identify")):
+        db.session.delete(fid)
+        db.session.commit()
+        return 'delete successfully'
+    else:
+        return "The identity you had input is valid", 404
 
 
 if __name__ == '__main__':
