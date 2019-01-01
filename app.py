@@ -1,12 +1,14 @@
-from flask import *
-from flask_sqlalchemy import *
+from flask import Flask,render_template,request,redirect
+from flask_sqlalchemy import SQLAlchemy
 # from pymysql import *
 import operator
 import sys
 # import pymysql
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:m,590718@localhost/mml'
+a=open('pw', 'r')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:{password}@localhost/mml?charset=utf8'.format(password=a.read())
+a.close()
 db = SQLAlchemy(app)
 
 
@@ -32,11 +34,12 @@ def index():
 def register():
     text = request.form.get("text")
     name = request.form.get("uid")
+    ip = request.remote_addr
     if sys.getsizeof(text) >= 60000:
         return "Too Long Text",413
     elif len(name) >= 20:
         return "Too Long Identity",413
-    net = exper('3', name, text)  # soon not complete the function' URL'
+    net = exper(ip, name, text)  # soon not complete the function' URL'
     db.session.add(net)
     db.session.commit()
     return redirect('/search/'+str(net.id))
@@ -67,6 +70,7 @@ def verify(idx):
 def modify(idx):
     fid = exper.query.get(idx)
     fid.textee = request.form.get("text")
+    fid.URL = request.remote_addr
     db.session.commit()
     return redirect('/search/' + str(idx))
 
